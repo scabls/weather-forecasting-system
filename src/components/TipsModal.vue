@@ -4,7 +4,7 @@
       class="tips-modal"
       ref="modal"
       :class="{ 'is-active': showModal }"
-      @keydown.prevent="closeModal"
+      @keydown.esc.prevent="closeModal"
     >
       <h2>关于:</h2>
       <p>这个应用可以用来追踪你选择城市的当前天气</p>
@@ -58,9 +58,6 @@ $duration: v-bind(duration);
   }
   &.is-active::backdrop {
     opacity: 1;
-  }
-  h2 {
-    line-height: 1.5;
   }
   p {
     font-size: 0.75rem;

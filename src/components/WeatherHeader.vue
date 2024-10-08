@@ -1,6 +1,6 @@
 <template>
   <header class="weather-header">
-    <nav class="weather-nav">
+    <nav class="weather-nav container">
       <router-link to="/" class="weather-logo">
         <div class="logo-icon">
           <i class="iconfont icon-fa-sun-o logo-text"></i>
@@ -37,16 +37,15 @@ const openModal = () => {
 .weather-header {
   position: sticky;
   top: 0px;
-  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   background-color: rgb(0 102 138 / 1);
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
   z-index: 10;
   .weather-nav {
     display: flex;
     align-items: center;
     gap: 1rem;
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 1.5rem 10rem;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
     color: rgb(255 255 255 / 1);
   }
   .weather-logo {
