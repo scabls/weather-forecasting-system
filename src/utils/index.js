@@ -11,4 +11,10 @@ const formatAayOfWeek = dateStr => {
   return days[targetDate.getDay()]
 }
 
-export { formatAayOfWeek }
+const getAreaName = geoObj => {
+  if (geoObj.district.length != 0) return geoObj.district
+  if (geoObj.city.length != 0) return geoObj.city
+  return geoObj.province
+}
+
+export { formatAayOfWeek, getAreaName }

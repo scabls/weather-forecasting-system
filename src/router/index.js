@@ -11,7 +11,7 @@ const router = createRouter({
     },
     {
       path: '/:adcode(\\d+)',
-      name: 'search',
+      name: 'weather',
       component: () => import('@/views/OtherPlaceView.vue'),
     },
   ],

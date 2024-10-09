@@ -1,20 +1,22 @@
 <template>
   <main class="container">
     <article class="search">
-      <input type="text" placeholder="请输入城市名称" />
-      <ul class="result-list" v-show="false">
+      <input type="text" placeholder="请输入城市名称" v-model.trim="keyword" />
+      <ul class="result-list" v-show="isInputing">
         <li v-show="false">对不起网络似乎除了点问题 请稍后再查询</li>
-        <li v-show="false">似乎没有找到你查找的城市</li>
-        <li class="result-item" v-if="false">濮阳市</li>
+        <li v-show="searchResponse.status === '0'">似乎没有找到你查找的城市</li>
+        <li class="result-item" v-if="searchResponse.status === '1'" @click="toForecastPage">
+          {{ areaName }}
+        </li>
       </ul>
     </article>
-    <h2 class="empty-message" v-if="false">
+    <h2 class="empty-message" :class="{ 'move-down': isInputing }" v-if="true">
       <!-- class="saved-list move-down" -->
       暂时没有保存过城市天气信息，请查询后点击右上角"+"号保存。
     </h2>
-    <article class="saved-list" v-if="true">
+    <article class="saved-list" v-if="false">
       <!-- class="saved-list move-down" -->
-      <section class="saved-item" @mouseover="showOperation" @mouseout="isShow = false">
+      <section class="saved-item" @mouseover="isShow = true" @mouseout="isShow = false">
         <!-- class="saved-item hover"  -->
         <aside class="item-info" :class="{ hover: isShow }">
           <span>濮阳市</span>
@@ -33,9 +35,42 @@
 
 <script setup>
 import LocalForecast from '@/components/LocalForecast.vue'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
+import { getAdcode } from '@/api/weather'
+import { getAreaName } from '@/utils'
+
+const keyword = ref('')
+const isInputing = ref(false)
 const isShow = ref(false)
-const showOperation = () => (isShow.value = true)
+const searchResponse = ref({})
+const areaName = ref('')
+const adcode = ref('')
+const router = useRouter()
+
+const toForecastPage = () => {
+  router.push({
+    name: 'weather',
+    params: { adcode: adcode.value },
+    query: { search: areaName.value },
+  })
+}
+
+watch(keyword, async () => {
+  if (!keyword.value.length) {
+    isInputing.value = false
+    searchResponse.value = {}
+    return
+  }
+  isInputing.value = true
+  searchResponse.value = await getAdcode(keyword.value)
+  if (searchResponse.value.status === '0') return
+  const {
+    geocodes: [geocode],
+  } = searchResponse.value
+  adcode.value = geocode.adcode
+  areaName.value = getAreaName(geocode)
+})
 </script>
 
 <style lang="scss" scoped>
