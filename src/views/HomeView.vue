@@ -27,12 +27,12 @@
       </section>
     </article>
     <h2 class="forecast-title">近期天气</h2>
-    <WeatherForecast />
+    <LocalForecast />
   </main>
 </template>
 
 <script setup>
-import WeatherForecast from '@/components/WeatherForecast.vue'
+import LocalForecast from '@/components/LocalForecast.vue'
 import { ref } from 'vue'
 const isShow = ref(false)
 const showOperation = () => (isShow.value = true)

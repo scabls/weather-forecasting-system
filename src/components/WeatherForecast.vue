@@ -1,17 +1,11 @@
 <template>
-  <article class="forecast">
+  <article class="forecast" v-if="casts.length">
     <section class="text-forecast">
-      <div class="daily-detail">
-        <span>今天</span><span>10-08</span><span>多云</span><span>风力 1-3级</span>
-      </div>
-      <div class="daily-detail">
-        <span>今天</span><span>10-08</span><span>多云</span><span>风力 1-3级</span>
-      </div>
-      <div class="daily-detail">
-        <span>今天</span><span>10-08</span><span>多云</span><span>风力 1-3级</span>
-      </div>
-      <div class="daily-detail">
-        <span>今天</span><span>10-08</span><span>多云</span><span>风力 1-3级</span>
+      <div class="daily-detail" v-for="cast in casts" :key="cast.date">
+        <span>{{ formatAayOfWeek(cast.date) }}</span>
+        <span>{{ cast.date.slice(5) }}</span>
+        <span>{{ cast.dayweather }}</span>
+        <span>风力 {{ cast.daypower }}级</span>
       </div>
     </section>
     <section class="chart-forecast">
@@ -21,46 +15,63 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
-const option = ref({
-  xAxis: {
-    show: false,
-    type: 'category',
-    boundaryGap: false,
+import { ref, computed, watchEffect } from 'vue'
+import { formatAayOfWeek } from '@/utils'
+const props = defineProps({
+  casts: {
+    type: Array,
+    requiried: true,
   },
-  yAxis: {
-    show: false,
-    type: 'value',
-  },
-  grid: {
-    top: 10,
-    bottom: 20,
-  },
-  series: [
-    {
-      name: 'Highest',
-      type: 'line',
-      data: [10, 11, 13, 11, 12, 12, 9],
-      label: {
-        show: true,
-        position: 'top',
-        formatter: '白{c}°C',
-        color: 'white',
-      },
-    },
-    {
-      name: 'Lowest',
-      type: 'line',
-      data: [1, -2, 2, 5, 3, 2, 0],
-      label: {
-        show: true,
-        position: 'bottom',
-        formatter: '晚{c}°C',
-        color: 'white',
-      },
-    },
-  ],
 })
+
+const dayTemps = computed(() => props.casts.map(cast => cast.daytemp))
+const nightTemps = computed(() => props.casts.map(cast => cast.nighttemp))
+
+const option = ref({})
+
+const renderChart = (dayTemps, nightTemps) => {
+  option.value = {
+    xAxis: {
+      show: false,
+      type: 'category',
+      boundaryGap: false,
+    },
+    yAxis: {
+      show: false,
+      type: 'value',
+    },
+    grid: {
+      top: 10,
+      bottom: 20,
+    },
+    series: [
+      {
+        name: '白天气温',
+        type: 'line',
+        data: dayTemps,
+        label: {
+          show: true,
+          position: 'top',
+          formatter: '白{c}°C',
+          color: 'white',
+        },
+      },
+      {
+        name: '夜晚气温',
+        type: 'line',
+        data: nightTemps,
+        label: {
+          show: true,
+          position: 'bottom',
+          formatter: '晚{c}°C',
+          color: 'white',
+        },
+      },
+    ],
+  }
+}
+
+watchEffect(() => renderChart(dayTemps.value, nightTemps.value))
 </script>
 
 <style lang="scss" scoped>
