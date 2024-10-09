@@ -20,6 +20,7 @@ export const useWeatherStore = defineStore('weather', () => {
     if (!areaName.value || !adcode.value) return
     placeList.value.push({ id: Date.now(), areaName: areaName.value, adcode: adcode.value })
   }
+  const removePlace = index => placeList.value.splice(index, 1)
 
   return {
     placeList,
@@ -33,6 +34,7 @@ export const useWeatherStore = defineStore('weather', () => {
     resetAreaName,
     resetAdcode,
     savePlace,
+    removePlace,
   }
 })
 

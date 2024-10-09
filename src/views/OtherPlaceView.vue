@@ -2,7 +2,8 @@
   <main class="search-weather">
     <template v-if="temperature">
       <article class="location-info">
-        你正在预览{{ areaName }}的天气信息<span>，可以通过右上角的"+"号按钮保存起来</span>
+        你正在预览{{ areaName }}的天气信息
+        <span v-if="!saveMark"> ， 可以通过右上角的"+"号按钮保存起来 </span>
       </article>
       <article class="weather-info container">
         <h1>当日气温是：{{ temperature }}摄氏度</h1>
@@ -23,10 +24,12 @@
 import WeatherForecast from '@/components/WeatherForecast.vue'
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
+import { storeToRefs } from 'pinia'
 import { getWeather, getForecast } from '@/api/weather'
 import { useWeatherStore } from '@/stores/weather'
 
-const { setPath } = useWeatherStore()
+const { saveMark } = storeToRefs(useWeatherStore())
+const { setAreaName, setAdcode, setPath } = useWeatherStore()
 const route = useRoute()
 
 const { adcode } = route.params
@@ -37,6 +40,8 @@ const temperature = ref('') // 温度
 const windDirection = ref('') // 风向
 const windSpeed = ref('') //风速
 
+setAreaName(areaName)
+setAdcode(adcode)
 setPath(route.path)
 
 onMounted(async () => {

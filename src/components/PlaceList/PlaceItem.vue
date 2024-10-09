@@ -1,20 +1,54 @@
 <template>
   <section class="saved-item" @mouseover="isShow = true" @mouseout="isShow = false">
     <aside class="item-info" :class="{ hover: isShow }">
-      <span>濮阳市</span>
-      <span>20度</span>
+      <span>{{ areaName }}</span>
+      <span>{{ temperature }}度</span>
     </aside>
     <aside class="item-operation" :class="{ hover: isShow }">
-      <button>查看</button>
-      <button>删除</button>
+      <button @click="toForecastPage">查看</button>
+      <button @click="removePlace(index)">删除</button>
     </aside>
   </section>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
+import { useWeatherStore } from '@/stores/weather'
+import { getWeather } from '@/api/weather'
+
+const { removePlace } = useWeatherStore()
+const router = useRouter()
+
+const props = defineProps({
+  index: {
+    type: Number,
+    required: true,
+  },
+  areaName: {
+    type: String,
+    required: true,
+  },
+  adcode: {
+    type: String,
+    required: true,
+  },
+})
 
 const isShow = ref(false)
+const temperature = ref(0)
+
+const toForecastPage = () => {
+  router.push({
+    name: 'weather',
+    params: { adcode: props.adcode },
+    query: { search: props.areaName },
+  })
+}
+
+onMounted(async () => {
+  ;({ temperature: temperature.value } = await getWeather(props.adcode).then(res => res.lives[0]))
+})
 </script>
 
 <style lang="scss" scoped>
