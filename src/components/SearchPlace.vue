@@ -14,7 +14,6 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { useWeatherStore } from '@/stores/weather'
 import { getAdcode } from '@/api/weather'
 import { getAreaName } from '@/utils'
 
