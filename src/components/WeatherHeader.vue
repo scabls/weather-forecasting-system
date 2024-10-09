@@ -8,9 +8,11 @@
         </div>
       </router-link>
       <div class="weather-info">
-        <h4>濮阳市</h4>
-        <span>实时天气：晴 22℃</span>
-        <span>西南风≤3级</span>
+        <template v-if="city">
+          <h4>{{ city }}</h4>
+          <span>实时天气：{{ weatherInfo }} {{ temperature }}℃</span>
+          <span>{{ windDirection }}风{{ windSpeed }}级</span>
+        </template>
       </div>
       <div class="operation-icons">
         <i class="iconfont icon-fa-circle-info icon-text" @click="openModal"></i>
@@ -22,14 +24,36 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
 import TipsModal from './TipsModal.vue'
-const modal = ref(null)
+import { ref, onMounted } from 'vue'
+import { getPlaceByIp, getWeather } from '@/api/weather'
+
+// 与tipsmodal组件通信, 控制modal显示隐藏
+const modal = ref(null) // 绑定在子组件获取的modal实例
 const showModal = ref(false)
+
+const city = ref('') // 城市名称
+const weatherInfo = ref('') // 天气信息
+const temperature = ref('') // 温度
+const windDirection = ref('') // 风向
+const windSpeed = ref('') //风速
+
 const openModal = () => {
   showModal.value = true
   modal.value.showModal()
 }
+
+onMounted(async () => {
+  const { adcode } = await getPlaceByIp()
+
+  ;({
+    city: city.value,
+    weather: weatherInfo.value,
+    temperature: temperature.value,
+    winddirection: windDirection.value,
+    windpower: windSpeed.value,
+  } = await getWeather(adcode).then(res => res.lives[0]))
+})
 </script>
 
 <style lang="scss" scoped>
