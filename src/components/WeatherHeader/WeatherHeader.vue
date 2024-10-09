@@ -16,7 +16,11 @@
       </div>
       <div class="operation-icons">
         <i class="iconfont icon-fa-circle-info icon-text" @click="openModal"></i>
-        <i class="iconfont icon-fa-plus icon-text"></i>
+        <i
+          class="iconfont icon-fa-plus icon-text"
+          @click="savePlace"
+          v-if="!saveMark && correctPath"
+        ></i>
       </div>
     </nav>
   </header>
@@ -26,7 +30,12 @@
 <script setup>
 import TipsModal from './TipsModal.vue'
 import { ref, onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useWeatherStore } from '@/stores/weather'
 import { getPlaceByIp, getWeather } from '@/api/weather'
+
+const { saveMark, correctPath } = storeToRefs(useWeatherStore())
+const { savePlace } = useWeatherStore()
 
 // 与tipsmodal组件通信, 控制modal显示隐藏
 const modal = ref(null) // 绑定在子组件获取的modal实例

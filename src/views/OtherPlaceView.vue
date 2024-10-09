@@ -24,8 +24,11 @@ import WeatherForecast from '@/components/WeatherForecast.vue'
 import { ref, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { getWeather, getForecast } from '@/api/weather'
+import { useWeatherStore } from '@/stores/weather'
 
+const { setPath } = useWeatherStore()
 const route = useRoute()
+
 const { adcode } = route.params
 const { search: areaName } = route.query
 const casts = ref([])
@@ -33,6 +36,8 @@ const weatherInfo = ref('') // 天气信息
 const temperature = ref('') // 温度
 const windDirection = ref('') // 风向
 const windSpeed = ref('') //风速
+
+setPath(route.path)
 
 onMounted(async () => {
   ;({

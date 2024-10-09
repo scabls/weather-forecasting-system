@@ -27,7 +27,7 @@ import { ref, computed } from 'vue'
 const modal = defineModel('modal')
 const showModal = defineModel('showModal')
 
-const delay = ref(1000)
+const delay = ref(800)
 
 const duration = computed(() => delay.value / 1000 + 's')
 

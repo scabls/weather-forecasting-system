@@ -14,6 +14,8 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import { storeToRefs } from 'pinia'
+import { useWeatherStore } from '@/stores/weather'
 import { getAdcode } from '@/api/weather'
 import { getAreaName } from '@/utils'
 
@@ -21,8 +23,9 @@ const isInputing = defineModel()
 
 const keyword = ref('')
 const searchResponse = ref({})
-const areaName = ref('')
-const adcode = ref('')
+
+const { areaName, adcode } = storeToRefs(useWeatherStore())
+const { setAreaName, setAdcode } = useWeatherStore()
 const router = useRouter()
 
 const toForecastPage = () => {
@@ -45,8 +48,8 @@ watch(keyword, async () => {
   const {
     geocodes: [geocode],
   } = searchResponse.value
-  adcode.value = geocode.adcode
-  areaName.value = getAreaName(geocode)
+  setAreaName(getAreaName(geocode))
+  setAdcode(geocode.adcode)
 })
 </script>
 
