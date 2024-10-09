@@ -4,7 +4,7 @@
 </template>
 
 <script setup>
-import WeatherHeader from './components/WeatherHeader.vue'
+import WeatherHeader from './components/WeatherHeader/WeatherHeader.vue'
 </script>
 
 <style lang="scss">
