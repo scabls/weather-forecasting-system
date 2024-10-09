@@ -14,7 +14,6 @@
 <script setup>
 import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import { useWeatherStore } from '@/stores/weather'
 import { getAdcode } from '@/api/weather'
 import { getAreaName } from '@/utils'
 
@@ -47,8 +46,12 @@ watch(keyword, async () => {
   const {
     geocodes: [geocode],
   } = searchResponse.value
-  areaName.value = getAreaName(geocode)
   adcode.value = geocode.adcode
+  if (adcode.value === '100000') {
+    searchResponse.value.status = '0' // 排除结果为整个国家的情况
+    return
+  }
+  areaName.value = getAreaName(geocode)
 })
 </script>
 

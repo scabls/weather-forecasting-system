@@ -14,9 +14,15 @@
 
 <script setup>
 import PlaceItem from './PlaceItem.vue'
+import { onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useWeatherStore } from '@/stores/weather'
 const { placeList } = storeToRefs(useWeatherStore())
+const { setPlaceList } = useWeatherStore()
+
+const list = JSON.parse(localStorage.getItem('placeList') || '[]')
+
+onMounted(() => setPlaceList(list))
 </script>
 
 <style lang="scss" scoped>
