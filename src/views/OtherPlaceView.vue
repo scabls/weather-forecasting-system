@@ -45,13 +45,21 @@ setAdcode(adcode)
 setPath(route.path)
 
 onMounted(async () => {
-  ;({
-    weather: weatherInfo.value,
-    temperature: temperature.value,
-    winddirection: windDirection.value,
-    windpower: windSpeed.value,
-  } = await getWeather(adcode).then(res => res.lives[0]))
-  ;({ casts: casts.value } = await getForecast(adcode).then(res => res.forecasts[0]))
+  try {
+    ;({
+      weather: weatherInfo.value,
+      temperature: temperature.value,
+      winddirection: windDirection.value,
+      windpower: windSpeed.value,
+    } = await getWeather(adcode).then(res => res.lives[0]))
+  } catch (error) {
+    console.error('搜索详情视图获取天气信息失败', error)
+  }
+  try {
+    ;({ casts: casts.value } = await getForecast(adcode).then(res => res.forecasts[0]))
+  } catch (error) {
+    console.error('搜索详情视图获取天气预报失败', error)
+  }
 })
 </script>
 

@@ -2,7 +2,6 @@
   <main class="container">
     <SearchPlace v-model="isInputing" />
     <PlacesList :class="{ 'move-down': isInputing }" />
-    <h2 class="forecast-title">近期天气</h2>
     <LocalForecast />
   </main>
 </template>
@@ -28,8 +27,5 @@ resetAdcode()
 <style lang="scss" scoped>
 .container {
   color: rgb(255 255 255 /1);
-  .forecast-title {
-    margin-top: 1.5rem;
-  }
 }
 </style>

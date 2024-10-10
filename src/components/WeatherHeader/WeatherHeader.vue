@@ -53,15 +53,22 @@ const openModal = () => {
 }
 
 onMounted(async () => {
-  const { adcode } = await getPlaceByIp()
-
-  ;({
-    city: city.value,
-    weather: weatherInfo.value,
-    temperature: temperature.value,
-    winddirection: windDirection.value,
-    windpower: windSpeed.value,
-  } = await getWeather(adcode).then(res => res.lives[0]))
+  try {
+    const { adcode } = await getPlaceByIp()
+    try {
+      ;({
+        city: city.value,
+        weather: weatherInfo.value,
+        temperature: temperature.value,
+        winddirection: windDirection.value,
+        windpower: windSpeed.value,
+      } = await getWeather(adcode).then(res => res.lives[0]))
+    } catch (error) {
+      console.error('header组件根据adcode获取天气信息失败: ', error)
+    }
+  } catch (error) {
+    console.error('header组件根据ip获取当地位置adcode失败: ', error)
+  }
 })
 </script>
 

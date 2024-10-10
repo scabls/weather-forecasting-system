@@ -2,7 +2,7 @@
   <article class="search">
     <input type="text" placeholder="请输入城市名称" v-model.trim="keyword" />
     <ul class="result-list" v-show="isInputing">
-      <li v-show="false">对不起网络似乎除了点问题 请稍后再查询</li>
+      <li v-show="searchResponse.status === '404'">对不起网络似乎除了点问题 请稍后再查询</li>
       <li v-show="searchResponse.status === '0'">似乎没有找到你查找的城市</li>
       <li class="result-item" v-if="searchResponse.status === '1'" @click="toForecastPage">
         {{ areaName }}
@@ -41,7 +41,15 @@ watch(keyword, async () => {
     return
   }
   isInputing.value = true
-  searchResponse.value = await getAdcode(keyword.value)
+
+  try {
+    searchResponse.value = await getAdcode(keyword.value)
+  } catch (error) {
+    console.error('搜索框获取地名失败: ', error)
+    searchResponse.value.status = '404'
+    return
+  }
+
   if (searchResponse.value.status === '0') return
   const {
     geocodes: [geocode],

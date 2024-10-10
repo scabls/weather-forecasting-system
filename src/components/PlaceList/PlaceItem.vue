@@ -1,5 +1,5 @@
 <template>
-  <section class="saved-item" @mouseover="isShow = true" @mouseout="isShow = false">
+  <div class="saved-item" @mouseover="isShow = true" @mouseout="isShow = false" v-if="temperature">
     <aside class="item-info" :class="{ hover: isShow }">
       <span>{{ areaName }}</span>
       <span>{{ temperature }}度</span>
@@ -8,7 +8,7 @@
       <button @click="toForecastPage">查看</button>
       <button @click="removePlace(index)">删除</button>
     </aside>
-  </section>
+  </div>
 </template>
 
 <script setup>
@@ -47,7 +47,11 @@ const toForecastPage = () => {
 }
 
 onMounted(async () => {
-  ;({ temperature: temperature.value } = await getWeather(props.adcode).then(res => res.lives[0]))
+  try {
+    ;({ temperature: temperature.value } = await getWeather(props.adcode).then(res => res.lives[0]))
+  } catch (error) {
+    console.error('追踪列表获取天气信息失败: ', error)
+  }
 })
 </script>
 

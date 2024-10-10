@@ -1,15 +1,15 @@
 <template>
-  <div class="places-list">
-    <article class="saved-list" v-if="placeList.length">
+  <article class="places-list">
+    <section class="saved-list" v-if="placeList.length">
       <PlaceItem
         v-for="(place, index) in placeList"
         :key="place.id"
         v-bind="place"
         :index="index"
       />
-    </article>
+    </section>
     <h2 class="empty-message" v-else>暂时没有保存过城市天气信息，请查询后点击右上角"+"号保存。</h2>
-  </div>
+  </article>
 </template>
 
 <script setup>
